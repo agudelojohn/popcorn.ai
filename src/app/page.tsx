@@ -52,7 +52,7 @@ export default function Home() {
   const listResultRef = useRef<HTMLDivElement>(null);
 
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
-  const [filmGenre, setFilmGenre] = useState<string[]>([]);
+  const [filmGenres, setFilmGenre] = useState<string[]>([]);
   const [loadingFetch, setLoadingFetch] = useState(false);
 
   const [resultMovies, setResultMovies] = useState<string[]>([]);
@@ -64,7 +64,7 @@ export default function Home() {
 
   function handleCalculateMovie() {
     setLoadingFetch(true);
-    getMoviesData()
+    getMoviesData({ emotions: selectedEmotions, genres: filmGenres })
       .then((res) => {
         setResultMovies(res);
       })
@@ -119,12 +119,12 @@ export default function Home() {
             <RoundedButton
               key={genre}
               text={genre}
-              selected={filmGenre.includes(genre)}
+              selected={filmGenres.includes(genre)}
               onClick={() => {
-                if (filmGenre.includes(genre)) {
-                  setFilmGenre(filmGenre.filter((g) => g !== genre));
+                if (filmGenres.includes(genre)) {
+                  setFilmGenre(filmGenres.filter((g) => g !== genre));
                 } else {
-                  setFilmGenre([...filmGenre, genre]);
+                  setFilmGenre([...filmGenres, genre]);
                 }
               }}
             />
@@ -132,6 +132,11 @@ export default function Home() {
       </div>
       <div className="flex gap-2 selft-center flex-wrap justify-center mt-10">
         <RoundedButton
+          disabled={
+            selectedEmotions.length === 0 ||
+            filmGenres.length === 0 ||
+            loadingFetch
+          }
           text={"Calcular Película"}
           onClick={handleCalculateMovie}
         />
