@@ -36,8 +36,10 @@ const mockRes = {
 };
 
 const requestCreator = async ({ prompt }: { prompt: string }) => {
+  const openAIModel =
+    process.env.NEXT_PUBLIC_OPENAI_MODEL || "gpt-5-nano-2025-08-07";
   const payload = {
-    model: "gpt-5-nano-2025-08-07",
+    model: openAIModel,
     messages: [
       {
         role: "user",
@@ -49,6 +51,14 @@ const requestCreator = async ({ prompt }: { prompt: string }) => {
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   const url = "https://api.openai.com/v1/chat/completions";
   let result;
+  if (process.env.NEXT_PUBLIC_USE_MOCK_API === "true") {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(mockRes);
+      }, 1000);
+    });
+  }
+  
   try {
     const res = await fetch(url, {
       method: "POST",

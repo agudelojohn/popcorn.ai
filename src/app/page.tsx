@@ -137,7 +137,7 @@ export default function Home() {
             filmGenres.length === 0 ||
             loadingFetch
           }
-          text={"Calcular Película"}
+          text={`Calcular Película${process.env.NEXT_PUBLIC_USE_MOCK_API === "true" ? " (Mock)" : ""}`}
           onClick={handleCalculateMovie}
         />
       </div>
